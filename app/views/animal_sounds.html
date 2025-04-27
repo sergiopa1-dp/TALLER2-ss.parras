@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Animal Sounds</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+            line-height: 1.6;
+        }
+
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+            padding: 20px 0;
+            border-bottom: 2px solid #3498db;
+            margin-bottom: 30px;
+        }
+
+        h2 {
+            color: #34495e;
+            margin-top: 30px;
+        }
+
+        .animal-card {
+            background-color: white;
+            border: 1px solid #e1e1e1;
+            border-radius: 8px;
+            padding: 25px;
+            margin: 20px 0;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            transition: transform 0.2s ease;
+        }
+
+        .animal-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .animal-card h3 {
+            color: #3498db;
+            margin-top: 0;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 10px;
+        }
+
+        code {
+            background-color: #f8f9fa;
+            padding: 3px 6px;
+            border-radius: 4px;
+            color: #e74c3c;
+            font-family: 'Courier New', Courier, monospace;
+        }
+
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        li {
+            background-color: #f8f9fa;
+            margin: 5px 0;
+            padding: 8px 15px;
+            border-radius: 4px;
+            color: #2c3e50;
+            border-left: 3px solid #3498db;
+            transition: background-color 0.2s ease;
+        }
+
+        li:hover {
+            background-color: #edf2f7;
+        }
+
+        .method {
+            display: inline-block;
+            background-color: #2ecc71;
+            color: white;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+
+        .play-button {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: background-color 0.2s ease;
+        }
+
+        .play-button:hover {
+            background-color: #2980b9;
+        }
+
+        .sound-status {
+            margin-top: 10px;
+            font-style: italic;
+            color: #7f8c8d;
+        }
+    </style>
+</head>
+<body>
+    <h1>🐾 Animal Sounds API</h1>
+    
+    <h2>📌 Available Endpoints:</h2>
+    <div class="animal-card">
+        <h3>Get All Animal Sounds</h3>
+        <p>Endpoint: <code>/api/animals/sounds</code></p>
+        <p><span class="method">GET</span></p>
+    </div>
+
+    <div class="animal-card">
+        <h3>Get Specific Animal Sound</h3>
+        <p>Endpoint: <code>/api/animal/sound/{animal_type}</code></p>
+        <p><span class="method">GET</span></p>
+        <p>Available animal types:</p>
+        <ul>
+            <li>
+                🐕 perro
+                <button class="play-button" onclick="playAnimalSound('perro')">Reproducir sonido</button>
+                <div id="perro-status" class="sound-status"></div>
+            </li>
+            <li>
+                🐱 gato
+                <button class="play-button" onclick="playAnimalSound('gato')">Reproducir sonido</button>
+                <div id="gato-status" class="sound-status"></div>
+            </li>
+            <li>
+                🦡 huron
+                <button class="play-button" onclick="playAnimalSound('huron')">Reproducir sonido</button>
+                <div id="huron-status" class="sound-status"></div>
+            </li>
+            <li>
+                🐍 boa
+                <button class="play-button" onclick="playAnimalSound('boa')">Reproducir sonido</button>
+                <div id="boa-status" class="sound-status"></div>
+            </li>
+        </ul>
+    </div>
+
+    <script>
+        async function playAnimalSound(animalType) {
+            const statusElement = document.getElementById(`${animalType}-status`);
+            statusElement.textContent = 'Reproduciendo sonido...';
+
+            try {
+                const response = await fetch(`/api/animal/sound/${animalType}`);
+                const data = await response.json();
+                
+                if (data.sound) {
+                    // Mostrar el sonido como texto
+                    statusElement.textContent = data.sound;
+                } else {
+                    statusElement.textContent = 'No se pudo reproducir el sonido';
+                }
+            } catch (error) {
+                statusElement.textContent = 'Error al reproducir el sonido';
+                console.error('Error:', error);
+            }
+
+            // Limpiar el mensaje después de 3 segundos
+            setTimeout(() => {
+                statusElement.textContent = '';
+            }, 3000);
+        }
+    </script>
+</body>
+</html>
